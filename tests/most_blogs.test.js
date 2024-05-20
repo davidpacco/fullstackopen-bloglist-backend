@@ -7,6 +7,7 @@ describe('most blogs', () => {
   test('when list is empty, is undefined', () => {
     assert.strictEqual(mostBlogs([]), undefined)
   })
+
   test('when list has only one blog, is the author of that blog', () => {
     assert.deepStrictEqual(mostBlogs([blogs[0]]), {
       author: "Michael Chan",

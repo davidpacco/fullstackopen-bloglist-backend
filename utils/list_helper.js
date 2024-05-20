@@ -70,10 +70,33 @@ const mostBlogs = (blogs) => {
   const blogsPerAuthor = _.countBy(blogs, 'author')
   const authorWithMostBlogs = _.maxBy(Object.entries(blogsPerAuthor), o => o[1])
 
-  return authorWithMostBlogs ? {
-    author: authorWithMostBlogs[0],
-    blogs: authorWithMostBlogs[1]
-  } : undefined
+  return authorWithMostBlogs
+    ? {
+      author: authorWithMostBlogs[0],
+      blogs: authorWithMostBlogs[1]
+    }
+    : undefined
+}
+
+const mostLikes = (blogs) => {
+  const authors = {}
+
+  blogs.forEach(blog => {
+    return authors[blog.author]
+      ? authors[blog.author] += blog.likes
+      : authors[blog.author] = blog.likes
+  })
+
+  const maxLikes = Math.max(...Object.values(authors))
+
+  const authorWithMostLikes = Object.entries(authors).find(author => author[1] === maxLikes)
+
+  return authorWithMostLikes
+    ? {
+      author: authorWithMostLikes[0],
+      likes: authorWithMostLikes[1]
+    }
+    : undefined
 }
 
 module.exports = {
@@ -81,5 +104,6 @@ module.exports = {
   dummy,
   totalLikes,
   favoriteBlog,
-  mostBlogs
+  mostBlogs,
+  mostLikes
 }
