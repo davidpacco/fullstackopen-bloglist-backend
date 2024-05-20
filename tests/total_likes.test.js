@@ -1,8 +1,7 @@
 const { test, describe } = require('node:test')
 const assert = require('node:assert')
 
-const blogs = require('../utils/list_helper').blogs
-const totalLikes = require('../utils/list_helper').totalLikes
+const { blogs, totalLikes } = require('../utils/list_helper')
 
 describe('total likes', () => {
   test('of empty list is zero', () => {

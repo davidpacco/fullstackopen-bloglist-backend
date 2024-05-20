@@ -1,3 +1,6 @@
+const _ = require('lodash')
+const array = require('lodash/array')
+
 const blogs = [
   {
     _id: "5a422a851b54a676234d17f7",
@@ -63,9 +66,20 @@ const favoriteBlog = (blogs) => {
   return blogs.find(blog => blog.likes === mostLikes)
 }
 
+const mostBlogs = (blogs) => {
+  const blogsPerAuthor = _.countBy(blogs, 'author')
+  const authorWithMostBlogs = _.maxBy(Object.entries(blogsPerAuthor), o => o[1])
+
+  return authorWithMostBlogs ? {
+    author: authorWithMostBlogs[0],
+    blogs: authorWithMostBlogs[1]
+  } : undefined
+}
+
 module.exports = {
   blogs,
   dummy,
   totalLikes,
-  favoriteBlog
+  favoriteBlog,
+  mostBlogs
 }
