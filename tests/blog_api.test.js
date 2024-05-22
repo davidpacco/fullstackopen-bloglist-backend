@@ -104,7 +104,7 @@ test('error is handled if url property is missing', async () => {
     .expect('Content-Type', /application\/json/)
 })
 
-test('a note can be deleted', async () => {
+test('a blog can be deleted', async () => {
   const blogsAtFirst = await helper.blogsInDb()
   const blogToDelete = blogsAtFirst[0]
 
@@ -117,6 +117,24 @@ test('a note can be deleted', async () => {
 
   const contents = blogsAtEnd.map(e => e.title)
   assert(!contents.includes(blogToDelete.title))
+})
+
+test('a blog likes can be updated', async () => {
+  const blogsAtFirst = await helper.blogsInDb()
+  const blogToUpdate = blogsAtFirst[0]
+
+  const blogUpdate = {
+    likes: 100
+  }
+
+  await api
+    .put(`/api/blogs/${blogToUpdate.id}`)
+    .send(blogUpdate)
+    .expect(200)
+    .expect('Content-Type', /application\/json/)
+
+  const blogsAtEnd = await helper.blogsInDb()
+  assert.strictEqual(blogsAtEnd[0].likes, 100)
 })
 
 after(async () => {
