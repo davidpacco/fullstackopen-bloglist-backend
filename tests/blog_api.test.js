@@ -61,6 +61,20 @@ test('a valid blog can be added', async () => {
   assert.strictEqual(blogsAtEnd.length, helper.initialBlogs.length + 1)
 })
 
+test('if likes property is missing, it is set to zero', async () => {
+  const newBlog = {
+    title: "Testing Blog",
+    author: "Alan Turing",
+    url: "https://testblog.com/"
+  }
+  const response = await api
+    .post('/api/blogs')
+    .send(newBlog)
+    .expect(201)
+
+  assert.strictEqual(response.body.likes, 0)
+})
+
 after(async () => {
   await mongoose.connection.close()
 })
