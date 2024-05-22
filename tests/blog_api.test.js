@@ -17,13 +17,25 @@ beforeEach(async () => {
   }
 })
 
-test.only('all blogs are returned', async () => {
+test('all blogs are returned', async () => {
   const response = await api
     .get('/api/blogs')
     .expect(200)
     .expect('Content-Type', /application\/json/)
 
   assert.strictEqual(response.body.length, helper.initialBlogs.length)
+})
+
+test('blogs id property exists', async () => {
+  const response = await api
+    .get('/api/blogs')
+    .expect(200)
+    .expect('Content-Type', /application\/json/)
+
+  const keys = response.body.map(e => Object.keys(e))
+
+  assert(keys.every(e => e.includes('id')))
+  assert(keys.every(e => !e.includes('_id')))
 })
 
 after(async () => {
