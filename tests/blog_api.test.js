@@ -67,12 +67,41 @@ test('if likes property is missing, it is set to zero', async () => {
     author: "Alan Turing",
     url: "https://testblog.com/"
   }
+
   const response = await api
     .post('/api/blogs')
     .send(newBlog)
     .expect(201)
 
   assert.strictEqual(response.body.likes, 0)
+})
+
+test('error is handled if title property is missing', async () => {
+  const newBlog = {
+    author: "Alan Turing",
+    url: "https://testblog.com/",
+    likes: 3
+  }
+
+  await api
+    .post('/api/blogs')
+    .send(newBlog)
+    .expect(400)
+    .expect('Content-Type', /application\/json/)
+})
+
+test('error is handled if url property is missing', async () => {
+  const newBlog = {
+    title: "Testing Blog",
+    author: "Alan Turing",
+    likes: 3
+  }
+
+  await api
+    .post('/api/blogs')
+    .send(newBlog)
+    .expect(400)
+    .expect('Content-Type', /application\/json/)
 })
 
 after(async () => {
