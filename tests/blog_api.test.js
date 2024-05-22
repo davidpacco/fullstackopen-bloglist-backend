@@ -38,6 +38,29 @@ test('blogs id property exists', async () => {
   assert(keys.every(e => !e.includes('_id')))
 })
 
+
+test('a valid blog can be added', async () => {
+  const newBlog = {
+    title: "Testing Blog",
+    author: "Alan Turing",
+    url: "https://testblog.com/",
+    likes: 5
+  }
+
+  const response = await api
+    .post('/api/blogs')
+    .send(newBlog)
+    .expect(201)
+
+  for (let key in newBlog) {
+    assert.strictEqual(newBlog[key], response.body[key])
+  }
+
+  const blogsAtEnd = await helper.blogsInDb()
+
+  assert.strictEqual(blogsAtEnd.length, helper.initialBlogs.length + 1)
+})
+
 after(async () => {
   await mongoose.connection.close()
 })
