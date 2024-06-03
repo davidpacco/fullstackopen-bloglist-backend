@@ -8,18 +8,20 @@ blogsRouter.get('/', async (req, res) => {
 })
 
 blogsRouter.post('/', async (req, res) => {
-  const { title, author, url } = req.body
+  const { title, author, url, likes } = req.body
   const user = req.user
+
+  if (!user) return res.status(401).json({ error: 'invalid token' })
 
   const blog = new Blog({
     title,
     author,
     url,
+    likes,
     user: user._id
   })
 
   const savedBlog = await blog.save()
-
   user.blogs = user.blogs.concat(savedBlog._id)
   await user.save()
 
@@ -40,6 +42,7 @@ blogsRouter.delete('/:id', async (req, res) => {
   const user = req.user
   const blog = await Blog.findById(req.params.id)
 
+  if (!user) return res.status(401).json({ error: 'invalid token' })
   if (!blog) return res.status(204).end()
 
   if (blog.user.toString() !== user._id.toString()) {
